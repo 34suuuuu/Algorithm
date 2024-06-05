@@ -1,97 +1,141 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int N, M;
-    static int[][] maps;
-    static boolean[][] visited;
-    static int[] dx = {0, 0, -1, 1};
-    static int[] dy = {1, -1, 0, 0};
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        maps = new int[N][M];
+	static class Ice{
+		int x;
+		int y;
 
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < M; j++) {
-                maps[i][j] = Integer.parseInt(st.nextToken());
-            }
-        }
+		Ice(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
 
-        int result = 0, cnt = 0;
-        while ((cnt = getCnt()) < 2) {
-            if (cnt == 0) {
-                result = 0;
-                break;
-            }
-            melt();
-            result++;
-        }
-        System.out.println(result);
-    }
+	static int N, M;
+	static int[][] maps;
+	static boolean[][] visited;
 
-    public static int getCnt() {
-        visited = new boolean[N][M];
+	static int[] dx = {0, 0, -1, 1};
+	static int[] dy = {1, -1, 0, 0};
 
-        int cnt = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (maps[i][j] != 0 && !visited[i][j]) {
-                    dfs(i, j);
-                    cnt++;
-                }
-            }
-        }
-        return cnt;
-    }
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-    public static void dfs(int x, int y) {
-        visited[x][y] = true;
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		maps = new int[N][M];
 
-        for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < M; j++) {
+				maps[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
 
-            if(nx<0 || nx>=N || ny<0 || ny>=M) continue;
-            if(maps[nx][ny]!= 0&& !visited[nx][ny]) dfs(nx, ny);
-        }
-    }
+		// 빙하를 녹이고 -> bfs
+		// 덩어리 갯수를 확인하는 -> dfs/ cntArea
+		int year = 0;
+		int result = cntArea();
+		while (result < 2) {
+			// 나눠진 덩어리가 2개 이상이라면 break;
+			// 나눠진 덩어리가 0개라면 다 녹은거라서 break;
+			if (result == 0) {
+				year = 0;
+				break;
+			}
 
-    public static void melt(){
-        Queue<int[]> queue = new LinkedList<>();
-        boolean[][] visited = new boolean[N][M];
+			bfs();
+			year++;
+			result = cntArea();
+		}
+		System.out.println(year);
+	}
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (maps[i][j] != 0) {
-                    queue.add(new int[]{i, j});
-                    visited[i][j] = true;
-                }
-            }
-        }
+	// 빙산 덩어리 개수를 세는 메소드
+	public static int cntArea() {
+		visited = new boolean[N][M];
+		int cnt = 0;
 
-        while (!queue.isEmpty()) {
-            int[] cur = queue.poll();
-            int zeroCnt = 0;
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				// if (!visited[i][j] && maps[i][j] > 0) {
+				if (maps[i][j] != 0 && !visited[i][j]) {
+					dfs(i, j);
+					cnt++;
+				}
+			}
+		}
+		return cnt;
+	}
 
-            for (int i = 0; i < 4; i++) {
-                int nx = cur[0] + dx[i];
-                int ny = cur[1] + dy[i];
+	public static void dfs(int x, int y) {
+		visited[x][y] = true;
 
-                if(nx<0 || nx>=N || ny<0 || ny>=M) continue;
-                if (!visited[nx][ny] && maps[nx][ny] == 0) zeroCnt++;
-            }
+		for (int i = 0; i < 4; i++) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
 
-            if (maps[cur[0]][cur[1]] - zeroCnt < 0) maps[cur[0]][cur[1]] = 0;
-            else maps[cur[0]][cur[1]] -= zeroCnt;
-        }
-    }
+			if(nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
+			if (!visited[nx][ny] && maps[nx][ny] != 0) {
+				// 빙산 덩어리 => maps[x][y] != 0
+				dfs(nx, ny);
+			}
+		}
+	}
+
+
+	// 빙하 녹이기
+	// 상하좌우에서 0이 아니면 큐에 담아주고 몇개의 0으로 둘러쌓였는지 확인해서 maps 갱신
+	static void bfs() {
+		Queue<Ice> que = new LinkedList<>();
+		boolean[][] visited = new boolean[N][M];
+
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (maps[i][j] != 0) {
+					que.add(new Ice(i, j));
+					visited[i][j] = true;
+				}
+			}
+		}
+
+		while (!que.isEmpty()) {
+			Ice ice = que.poll();
+			int ice_x = ice.x;
+			int ice_y = ice.y;
+			int zeroCnt = 0; // 상하좌우에 바닷물에 접해있는 부분의 면적을 세기 위해서
+
+			for (int i = 0; i < 4; i++) {
+				int nx = ice_x + dx[i];
+				int ny = ice_y + dy[i];
+
+				if(nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
+				if (!visited[nx][ny] && maps[nx][ny] == 0) {
+					//빙하 => maps[nx][ny] == 0
+					zeroCnt++;
+				}
+			}
+
+			// 주변 바닷물 면적 구해서 빙하 녹이기
+			if (maps[ice_x][ice_y] - zeroCnt < 0) {
+				maps[ice_x][ice_y] = 0;
+			} else {
+				maps[ice_x][ice_y] -= zeroCnt;
+			}
+		}
+	}
+
+	static void printMaps(){
+		for (int[] i : maps) {
+			for (int j : i) {
+				System.out.print(j + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
 }
+
