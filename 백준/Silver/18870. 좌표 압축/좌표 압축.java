@@ -1,37 +1,35 @@
-import java.util.HashMap;
-import java.util.Scanner;
-
-import static java.util.Arrays.sort;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int n = Integer.parseInt(br.readLine());
 
-        int n = sc.nextInt();
-        int[] sorted = new int[n];
-        int[] origin = new int[n];
-        HashMap<Integer, Integer> map = new HashMap<>();
+		int[] arr = new int[n];
+		int[] nums = new int[n];
+		HashMap<Integer, Integer> map = new HashMap<>();
 
-        for (int i = 0; i < n; i++) {
-            sorted[i] = sc.nextInt();
-            origin[i] = sorted[i];
-        }
-        sort(sorted);
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < n; i++) {
+			nums[i] = Integer.parseInt(st.nextToken());
+			arr[i] = nums[i];
+		}
+		Arrays.sort(arr);
 
-        int rank = 0;
-        for(int s : sorted)
-            if(!map.containsKey(s)){
-                map.put(s, rank);
-                rank++;
-            }
+		int rank = 0;
+		for (int i : arr) {
+			if (!map.containsKey(i)) {
+				map.put(i, rank);
+				rank++;
+			}
+		}
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < nums.length; i++) {
+			sb.append(map.get(nums[i]) + " ");
+		}
+		System.out.println(sb);
 
-        StringBuilder sb = new StringBuilder();
-        for (int k : origin) {
-            int ranking = map.get(k);
-            sb.append(ranking + " ");
-        }
-        System.out.println(sb);
 
-
-    }
+	}
 }
