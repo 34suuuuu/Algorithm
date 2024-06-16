@@ -1,52 +1,48 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	static BufferedReader rd = new BufferedReader(new InputStreamReader(System.in));
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer tk = null;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-	static int N, T, S, Lsum, Rsum, Lmax, Rmax;
-	static int[] L, R;
-	
-	public static void main(String[] args) throws Exception {
-		tk = new StringTokenizer(rd.readLine());
-		N = Integer.parseInt(tk.nextToken());
-		T = Integer.parseInt(tk.nextToken());
-		
-		L = new int[N];
-		R = new int[N];
-		for (int i=0; i<N; i++) {
-			tk = new StringTokenizer(rd.readLine());
-			L[i] = Integer.parseInt(tk.nextToken());
-			R[i] = Integer.parseInt(tk.nextToken());
+		int N = Integer.parseInt(st.nextToken());
+		int T = Integer.parseInt(st.nextToken());
+
+		int[] L = new int[N];
+		int[] R = new int[N];
+		int Lsum = 0, Rsum = 0, Lmax = 0, Rmax = 0;
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+
+			L[i] = Integer.parseInt(st.nextToken());
+			R[i] = Integer.parseInt(st.nextToken());
 			Lsum += L[i];
 			Rsum += R[i];
 			Lmax = Math.max(Lmax, L[i]);
 			Rmax = Math.max(Rmax, R[i]);
 		}
-		
-		if (T < Lsum || T > Rsum) {	// 모두 L만큼 먹어도 부족하거나 모두 R만큼 먹어도 남으면 안됨
+		if (T < Lsum || Rsum < T) {
 			System.out.println(-1);
 			return;
 		}
-		
-		// S: Lmax~Rmax 이분탐색
-		int lo = Lmax;
-		int hi = Rmax;
+
+		int left = Lmax;
+		int right = Rmax;
 		int S = -1;
-		int sum;
-		while (lo <= hi) {
-			sum = 0;
-			S = (lo + hi) / 2;
-			for (int i=0; i<N; i++) {
+		while (left <= right) {
+            		int sum = 0;
+			S = (left + right) / 2;
+
+			for (int i = 0; i < N; i++) {
 				sum += Math.min(R[i], S);
 			}
-			if (sum >= T) hi = S - 1;
-			else lo = S + 1;
+			if (sum >= T) {
+				right = S - 1;
+			} else {
+				left = S + 1;
+			}
 		}
-		
 		System.out.println(S);
 	}
 }
