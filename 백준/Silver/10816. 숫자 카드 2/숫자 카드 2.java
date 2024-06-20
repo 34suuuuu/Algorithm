@@ -12,12 +12,7 @@ public class Main {
 		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < n; i++) {
 			int key = Integer.parseInt(st.nextToken());
-			if (myMap.containsKey(key)) {
-				int value = myMap.get(key);
-				myMap.put(key, value + 1);
-			} else {
-				myMap.put(key, 1);
-			}
+			myMap.put(key,myMap.getOrDefault(key,0)+1);
 		}
 
 		int m = Integer.parseInt(br.readLine());
