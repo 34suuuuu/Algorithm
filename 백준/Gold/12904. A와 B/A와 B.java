@@ -3,26 +3,18 @@ import java.io.*;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String s = br.readLine();
-		String t = br.readLine();
+		StringBuilder s = new StringBuilder(br.readLine());
+		StringBuilder t = new StringBuilder(br.readLine());
 
 		while (t.length() > s.length()) {
 			char c = t.charAt(t.length() - 1);
 			if (c == 'A') {
-				t = t.substring(0, t.length() - 1);
+				t.deleteCharAt(t.length() - 1);
 			} else {
-				t = t.substring(0, t.length() - 1);
-				t = reverse(t);
+				t.deleteCharAt(t.length() - 1);
+				t.reverse();
 			}
 		}
-		System.out.println(s.equals(t) ? 1 : 0);
-	}
-
-	static String reverse(String s) {
-		String answer = "";
-		for (int i = s.length() - 1; i >= 0; i--) {
-			answer += s.charAt(i);
-		}
-		return answer;
+		System.out.println(s.toString().equals(t.toString()) ? 1 : 0);
 	}
 }
