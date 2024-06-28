@@ -4,7 +4,7 @@ import java.util.*;
 public class Main {
 	static int[][] maps;
 	static boolean[][]visited;
-	static int n, m, result;
+	static int n, m;
 	static int[] dx = {0, 0, 1, 1, 1, -1, -1, -1};
 	static int[] dy = {1, -1, 0, -1, 1, -1, 0, 1};
 
@@ -24,7 +24,7 @@ public class Main {
 			}
 		}
 
-		result = 0;
+		int result = 0;
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
 				if (maps[i][j] == 0) {
