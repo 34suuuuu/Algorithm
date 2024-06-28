@@ -20,7 +20,6 @@ public class Main {
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < m; j++) {
-				visited = new boolean[n][m];
 				maps[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
