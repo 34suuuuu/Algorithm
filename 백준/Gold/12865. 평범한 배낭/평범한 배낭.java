@@ -17,7 +17,6 @@ public class Main {
 			values[i]  = Integer.parseInt(st.nextToken());
 		}
 
-		// dp[i][j] : i번째까지 물건을 넣을 수 있고, 배낭에 넣을 수 있는 무게가 j
 		int[][] dp = new int[n + 1][k + 1];
 		for (int i = 1; i <= n; i++) {
 			for (int j = 1; j <= k; j++) {
@@ -27,7 +26,7 @@ public class Main {
 					dp[i][j] = dp[i - 1][j];
 				}
 			}
-		}
+        }
 		System.out.println(dp[n][k]);
 	}
 }
