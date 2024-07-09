@@ -1,10 +1,9 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 	static char[] king, rock;
+	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -16,7 +15,7 @@ public class Main {
 		for (int i = 0; i < N; i++) {
 			String command = br.readLine();
 			char[] nKing = move(command, king);
-
+			
 			if(isOverRange(nKing)) continue;
 			if(nKing[0] == rock[0] && nKing[1] == rock[1]) {
 				char[] nRock = move(command, rock);
