@@ -16,8 +16,7 @@ public class Main {
 			int n = Integer.parseInt(st.nextToken());
 			int m = (int)(Float.parseFloat(st.nextToken()) * 100 + 0.5);
 
-			if (n == 0 && m == 0f) {
-				// 종료 조건
+			if (n == 0 && m == 0) {
 				break;
 			}
 			calories = new int[n + 1];
@@ -31,7 +30,7 @@ public class Main {
 			dp = new int[m + 1];
 			for (int i = 1; i <= n; i++) {
 				for (int j = 0; j <= m; j++) {
-					if (j - prices[i] >= 0) {
+					if (prices[i] <= j) {
 						dp[j] = Math.max(dp[j], dp[j - prices[i]] + calories[i]);
 					}
 				}
