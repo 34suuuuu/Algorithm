@@ -41,15 +41,14 @@ public class Main {
 		que.add(new int[] {x, y, 1});
 		visited[x][y] = true;
 
-		while(!que.isEmpty()) {
+		while (!que.isEmpty()) {
 			int[] cur = que.poll();
 			result = cur[2];
-
 			for (int i = 0; i < 4; i++) {
 				int nx = cur[0] + dx[i];
 				int ny = cur[1] + dy[i];
 
-				if (nx < 0 || ny < 0 || nx >= n || ny >= n || visited[nx][ny]) continue;
+				if(nx<0 || ny<0 || nx>=n || ny>=n || visited[nx][ny]) continue;
 				if (maps[nx][ny] == '1') {
 					visited[nx][ny] = true;
 					que.add(new int[] {nx, ny, cur[2] + 1});
