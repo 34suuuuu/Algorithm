@@ -21,11 +21,11 @@ public class Main {
 		}
 
 		while (left < right) {
-			int x = (int)((left + right + 1) / 2);
-			boolean isUnderG = chkVirus(x);
+			int mid = (int)((left + right + 1) / 2);
+			boolean isUnderG = chkVirus(mid);
 
-			if(isUnderG) left = x;
-			else right = x-1;
+			if(isUnderG) left = mid;
+			else right = mid-1;
 		}
 		System.out.println(left);
 	}
