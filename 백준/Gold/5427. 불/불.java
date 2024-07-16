@@ -1,107 +1,86 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+class Position{
+	int x,y;
+
+	Position(int x, int y ) {
+		this.x = x;
+		this.y = y;
+	}
+}
 
 public class Main {
+	static char[][] maps;
+	static int n,m, answer;
 	static int[] dx = {0, 0, -1, 1};
 	static int[] dy = {1, -1, 0, 0};
+	static Position start;
+	static Queue<Position> fires;
 
-	static class Point{
-		int x, y;
-
-		Point(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-	}
-
-	public static void main(String[] args) throws NumberFormatException, IOException {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-
-		int T = Integer.parseInt(br.readLine());
 		StringBuilder sb = new StringBuilder();
+		int t = Integer.parseInt(br.readLine());
 
-		while (T-- > 0) {
-			st = new StringTokenizer(br.readLine());
-			int w = Integer.parseInt(st.nextToken());
-			int h = Integer.parseInt(st.nextToken());
+		for(int test_case = 0; test_case < t; test_case++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			n = Integer.parseInt(st.nextToken());
+			m = Integer.parseInt(st.nextToken());
+			maps = new char[m][n];
+			fires = new LinkedList<>();
+			answer = 0;
 
-			char[][] maps = new char[h][w];
-			Queue<Point> point = new LinkedList<>();
-			Queue<Point> fire = new LinkedList<>();
-
-			for (int i = 0; i < h; i++) {
-				maps[i] = br.readLine().toCharArray();
-				for (int j = 0; j < w; j++) {
-					if (maps[i][j] == '@') {
-						point.add(new Point(i, j));
-						maps[i][j] = '.';
+			start = new Position(0, 0);
+			for (int i = 0; i < m; i++) {
+				String str = br.readLine();
+				for (int j = 0; j < n; j++) {
+					maps[i][j] = str.charAt(j);
+					if (str.charAt(j) == '@') {
+						// 시작지점
+						start.x = i;
+						start.y = j;
 					} else if (maps[i][j] == '*') {
-						fire.add(new Point(i, j));
+						// 불
+						fires.add(new Position(i, j));
 					}
 				}
 			}
+			fires.add(new Position(start.x, start.y));
+			sb.append(bfs() ? answer : "IMPOSSIBLE").append("\n");
+		}
+		System.out.println(sb);
+	}
 
-			int count = 0;
-			boolean escape = false;
-			boolean[][] visit = new boolean[h][w];
-			visit[point.peek().x][point.peek().y] = true;
+	static boolean bfs() {
 
-			loop:
-			while (true) {
+		while(!fires.isEmpty()) {
+			answer++;
+			int size = fires.size();
+			for (int s = 0; s < size; s++) {
+				Position cur = fires.poll();
 
-				int size = fire.size();
-				while (size-- > 0) {
-					Point f = fire.poll();
-					
-					for (int i = 0; i < 4; i++) {
-						int nh = f.x + dx[i];
-						int nw = f.y + dy[i];
+				for (int i = 0; i < 4; i++) {
+					int nx = cur.x + dx[i];
+					int ny = cur.y + dy[i];
 
-						if (nh < 0 || nh >= h || nw < 0 || nw >= w) {
-							continue;
-						}
-						if (maps[nh][nw] != '.') {
-							continue;
-						}
-						maps[nh][nw] = '*';
-						fire.add(new Point(nh, nw));
+					if (nx < 0 || nx >= m || ny < 0 || ny >= n){
+						if(maps[cur.x][cur.y]  == '@') return true;
+						continue;
 					}
+					if(maps[nx][ny] != '.') continue;
+					maps[nx][ny] = maps[cur.x][cur.y];
+					fires.add(new Position(nx, ny));
 				}
-				count++;
-				size = point.size();
-				while (size-- > 0) {
-					Point now = point.poll();
-
-					for (int i = 0; i < 4; i++) {
-						int nh = now.x + dx[i];
-						int nw = now.y + dy[i];
-
-						if (nh < 0 || nh >= h || nw < 0 || nw >= w) {
-							escape = true;
-							break loop;
-						}
-						if (visit[nh][nw]) {
-							continue;
-						}
-						if (maps[nh][nw] == '.') {
-							visit[nh][nw] = true;
-							point.add(new Point(nh, nw));
-						}
-					}
-				}
-
-				if (point.isEmpty()) {
-					break;
-				}
-			}
-
-			if (escape) {
-				sb.append(count).append("\n");
-			}else{
-				sb.append("IMPOSSIBLE\n");
 			}
 		}
-		System.out.println(sb.toString().trim());
+		return false;
 	}
+
 }
