@@ -17,12 +17,9 @@ public class Main {
 		n = Integer.parseInt(st.nextToken());
 		k = Integer.parseInt(st.nextToken());
 
+		// visited 배열 없이 방문 여부를 확인하기 위해 사용
+		// -1이면 아직 방문하지 않은 위치
 		Arrays.fill(dist, -1);
-
-		if (n == k) {
-			System.out.println(0);
-			return;
-		}
 		bfs(n);
 	}
 
