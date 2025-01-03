@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
@@ -12,20 +13,23 @@ public class Main {
 		for (int i = 0; i < n; i++) {
 			words[i] = br.readLine();
 		}
-		words = Arrays.stream(words).distinct().toArray(String[]::new);
+		String[] uniqueWords = Arrays.stream(words)
+			.distinct()
+			.toArray(String[]::new);
 
-		Arrays.sort(words, (o1,o2) -> {
-			if (o1.length() == o2.length()) {
-				return o1.compareTo(o2);
-			}else
+		Arrays.sort(uniqueWords, new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				if (o1.length() == o2.length()) {
+					return o1.compareTo(o2);
+				}
 				return o1.length() - o2.length();
-		} );
+			}
+		});
 
-		StringBuilder sb = new StringBuilder();
-		for (String s : words) {
-			sb.append(s).append("\n");
+		for (String s : uniqueWords) {
+			System.out.println(s);
 		}
 
-		System.out.println(sb);
 	}
 }
