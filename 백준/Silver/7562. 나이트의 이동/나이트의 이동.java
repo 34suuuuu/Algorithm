@@ -1,8 +1,13 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-	static int start_x, start_y, end_x, end_y, l;
+	static int size;
+	static int x1, y1, x2, y2;
 	static int[][] maps;
 	static boolean[][] visited;
 	static int[] dx = {1, 2, 2, 1, -1, -2, -2, -1};
@@ -12,45 +17,48 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		StringBuilder sb = new StringBuilder();
-		int T = Integer.parseInt(br.readLine());
+		int test_case = Integer.parseInt(br.readLine());
 
-		for (int test_case = 0; test_case < T; test_case++) {
-			l = Integer.parseInt(br.readLine());
-			maps = new int[l][l];
-			visited = new boolean[l][l];
+		for (int t = 0; t < test_case; t++) {
+			size = Integer.parseInt(br.readLine());
 
-			st = new StringTokenizer(br.readLine());
-			start_x = Integer.parseInt(st.nextToken());
-			start_y = Integer.parseInt(st.nextToken());
+			maps = new int[size][size];
+			visited = new boolean[size][size];
 
 			st = new StringTokenizer(br.readLine());
-			end_x = Integer.parseInt(st.nextToken());
-			end_y = Integer.parseInt(st.nextToken());
+			x1 = Integer.parseInt(st.nextToken());
+			y1 = Integer.parseInt(st.nextToken());
+
+			st = new StringTokenizer(br.readLine());
+			x2 = Integer.parseInt(st.nextToken());
+			y2 = Integer.parseInt(st.nextToken());
 
 			bfs();
-			sb.append(maps[end_x][end_y] + "\n");
+
+			sb.append(maps[x2][y2]).append("\n");
 		}
 		System.out.println(sb);
 	}
 
-	static void bfs() {
+	public static void bfs() {
 		Queue<int[]> que = new LinkedList<>();
-		que.add(new int[] {start_x, start_y});
-		visited[start_x][start_y] = true;
+		que.add(new int[]{x1, y1});
+		visited[x1][y1] = true;
 
 		while (!que.isEmpty()) {
 			int[] cur = que.poll();
+			int curX = cur[0];
+			int curY = cur[1];
 
 			for (int i = 0; i < 8; i++) {
-				int nx = cur[0] + dx[i];
-				int ny = cur[1] + dy[i];
+				int nx = curX + dx[i];
+				int ny = curY + dy[i];
 
-				if (nx < 0 || nx >= l || ny < 0 || ny >= l) continue;
-				if (!visited[nx][ny]) {
-					que.add(new int[] {nx, ny});
-					maps[nx][ny] = maps[cur[0]][cur[1]] + 1;
-					visited[nx][ny] = true;
-				}
+				if(nx<0 || nx>=size || ny<0 || ny>=size || visited[nx][ny]) continue;
+				
+				que.add(new int[]{nx, ny});
+				maps[nx][ny] = maps[curX][curY] + 1;
+				visited[nx][ny] = true;
 			}
 		}
 	}
