@@ -2,52 +2,41 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int N,connection, cnt;
-	static List[] computers;
+	static int n, m;
+	static int[][] computers;
 	static boolean[] visited;
+	static int result = 0;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+		n = Integer.parseInt(br.readLine());
+		m = Integer.parseInt(br.readLine());
 
-		cnt = -1;
-		N = Integer.parseInt(br.readLine());
-		connection = Integer.parseInt(br.readLine());
-		visited = new boolean[N + 1];
-		computers = new List[N + 1];
-		for (int i = 1; i < N + 1; i++) {
-			computers[i] = new ArrayList<Integer>();
-		}
+		computers = new int[n + 1][n + 1];
+		visited = new boolean[n + 1];
 
-		for (int i = 0; i < connection; i++) {
-			st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < m; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
-			computers[a].add(b);
-			computers[b].add(a);
+			computers[a][b] = computers[b][a] = 1;
 		}
-		bfs(1);
-		System.out.println(cnt);
+		dfs(1);
+		System.out.println(result);
 	}
 
-	private static void bfs(int start) {
-		Queue<Integer> queue = new LinkedList<>();
-		queue.add(start);
+	public static void dfs(int node) {
+		visited[node] = true;
 
-		while (!queue.isEmpty()) {
-			int cur = queue.poll();
-			if (!visited[cur]) {
-				++cnt;
-				visited[cur] = true;
-				for (int i = 0; i < computers[cur].size(); i++) {
-					queue.add((int)computers[cur].get(i));
-				}
+		for (int i = 1; i < computers[node].length; i++) {
+			// 방문하지 않았고, 연결되어있다면
+			if(!visited[i] && computers[node][i] == 1) {
+				result++;
+				dfs(i);
 			}
 		}
 	}
