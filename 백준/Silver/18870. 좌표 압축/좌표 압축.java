@@ -1,35 +1,39 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
 
-		int[] arr = new int[n];
 		int[] nums = new int[n];
-		HashMap<Integer, Integer> map = new HashMap<>();
-
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < n; i++) {
-			nums[i] = Integer.parseInt(st.nextToken());
-			arr[i] = nums[i];
+			int cur = Integer.parseInt(st.nextToken());
+			nums[i] = cur;
 		}
-		Arrays.sort(arr);
 
-		int rank = 0;
-		for (int i : arr) {
-			if (!map.containsKey(i)) {
-				map.put(i, rank);
-				rank++;
+		int[] sorted_nums = nums.clone();
+		Arrays.sort(sorted_nums);
+
+		HashMap<Integer, Integer> maps = new HashMap<>();
+		int idx = 0;
+		for (int num : sorted_nums) {
+			if(!maps.containsKey(num)) {
+				maps.put(num, idx++);
 			}
+
 		}
+
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < nums.length; i++) {
-			sb.append(map.get(nums[i]) + " ");
+		for (int num : nums) {
+			sb.append(maps.get(num)).append(" ");
 		}
 		System.out.println(sb);
-
-
 	}
 }
