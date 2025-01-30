@@ -1,50 +1,55 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int N, M;
-	static ArrayList<Integer>[] graph;
+	static int[][] connections;
 	static boolean[] visited;
+	static int n, m;
 	static int cnt = 0;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+		n = Integer.parseInt(st.nextToken());
+		m  = Integer.parseInt(st.nextToken());
+		connections = new int[n + 1][n + 1];
+		visited = new boolean[n + 1];
 
-		graph = new ArrayList[N + 1];
-		for (int i = 0; i <= N; i++) {
-			graph[i] = new ArrayList<>();
-		}
-		visited = new boolean[N + 1];
-		for (int i = 0; i < M; i++) {
+		for (int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
-			int u = Integer.parseInt(st.nextToken());
-			int v = Integer.parseInt(st.nextToken());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
 
-			graph[u].add(v);
-			graph[v].add(u);
+			connections[a][b] = 1;
+			connections[b][a] = 1;
 		}
 
-		for (int i = 1; i <= N; i++) {
+		for (int i = 1; i <= n; i++) {
 			if (!visited[i]) {
-				dfs(i);
+				bfs(i);
 				cnt++;
-
 			}
 		}
 		System.out.println(cnt);
 	}
 
-	private static void dfs(int start) {
+	public static void bfs(int start) {
+		Queue<Integer> que = new LinkedList<>();
+		que.add(start);
 		visited[start] = true;
-		for (int i : graph[start]) {
-			if (!visited[i]) {
-				dfs(i);
+
+		while (!que.isEmpty()) {
+			int cur = que.poll();
+
+			for (int i = 1; i <= n; i++) {
+				if(!visited[i] && connections[cur][i] == 1) {
+					que.add(i);
+					visited[i] = true;
+				}
 			}
 		}
 	}
