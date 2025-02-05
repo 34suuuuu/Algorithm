@@ -1,22 +1,28 @@
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		StringTokenizer st;
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
 
-		Deque<Integer> deque = new LinkedList<>();
-		int n = Integer.parseInt(br.readLine());
-		for (int i = 0; i < n; i++) {
-			deque.add(i + 1);
+		Queue<Integer> que = new LinkedList<>();
+		for (int i = 1; i <= n; i++) {
+			que.add(i);
 		}
-		while (deque.size() > 1) {
-			deque.poll();
-			int tmp = deque.poll();
-			deque.addLast(tmp);
+
+		while (que.size() > 1) {
+			que.poll();
+			int top = que.poll();
+			que.add(top);
 		}
-		System.out.println(deque.poll());
+
+		while(!que.isEmpty()) {
+			System.out.println(que.poll());
+
+		}
 	}
 }
