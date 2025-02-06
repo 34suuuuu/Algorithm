@@ -1,26 +1,25 @@
-import java.io.*;
-import java.util.*;
 public class Main {
-    public static void main(String[] args) throws IOException {
-        boolean[] arr = new boolean[10001];
-        for (int i = 1; i <= 10000; i++) {
-            int num = d(i);
-            arr[num] = true;
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i <= 10000; i++) {
-            if (!arr[i]) sb.append(i + "\n");
-        }
-        System.out.print(sb);
-    }
+	public static void main(String[] args) {
+		int[] nums = new int[10001];
+		for (int i = 1; i <= 10000; i++) {
+			int num = solution(i);
+			nums[num] = -1;
+		}
+		StringBuilder sb = new StringBuilder();
+		for (int i = 1; i <= 10000; i++) {
+			if(nums[i] != -1)
+				sb.append(i).append("\n");
+		}
+		System.out.println(sb);
+	}
 
-    static int d(int n) { //셀프 넘버 함수
-        int sum = n;
-        while (n != 0) {
-            sum += n % 10;
-            n /= 10;
-        }
-        if (sum <= 10000) return sum;
-        return 0;
-    }
+	public static int solution(int n) {
+		int sum = n;
+
+		while (n != 0) {
+			sum += (n % 10);
+			n /= 10;
+		}
+		return (sum > 10000 ? 0 : sum);
+	}
 }
