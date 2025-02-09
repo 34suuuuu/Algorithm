@@ -37,7 +37,7 @@ public class Main {
 			int nx = x + (maps[x][y] * dx[i]);
 			int ny = y + (maps[x][y] * dy[i]);
 
-			if (nx >= n || ny >= n || visited[nx][ny]) continue;
+			if (nx < 0 || ny < 0 || nx >= n || ny >= n || visited[nx][ny]) continue;
 			visited[nx][ny] = true;
 			dfs(nx, ny);
 		}
