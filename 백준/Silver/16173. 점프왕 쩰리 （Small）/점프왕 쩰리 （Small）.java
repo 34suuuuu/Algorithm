@@ -1,55 +1,45 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-	static int[][] maps;
 	static int n;
+	static int[][] maps;
 	static boolean[][] visited;
+	static int[] dx = {0, 1};
+	static int[] dy = {1, 0};
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
 		n = Integer.parseInt(br.readLine());
 
 		maps = new int[n][n];
 		visited = new boolean[n][n];
 		for (int i = 0; i < n; i++) {
-			st = new StringTokenizer(br.readLine());
+			StringTokenizer st  = new StringTokenizer(br.readLine());
 			for (int j = 0; j < n; j++) {
 				maps[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
 
-		System.out.println(bfs(0, 0));
+		dfs(0, 0);
+		System.out.println("Hing");
 	}
 
-	static String bfs(int x, int y) {
-		Queue<int[]> que = new LinkedList<>();
-		que.add(new int[] {x, y});
-		visited[x][y] = true;
-
-		while(!que.isEmpty()) {
-			int[] cur = que.poll();
-
-			if (maps[cur[0]][cur[1]] == -1) {
-				// 마지막 지점에 도달
-				return "HaruHaru";
-			}
-
-			// 아래로 이동하는 경우
-			if (cur[0] + maps[cur[0]][cur[1]] < n && !visited[cur[0] + maps[cur[0]][cur[1]]][cur[1]]) {
-				int nx = cur[0] + maps[cur[0]][cur[1]];
-				que.add(new int[] {nx, cur[1]});
-				visited[nx][cur[1]] = true;
-			}
-
-			// 오른쪽으로 이동하는 경우
-			if (cur[1] + maps[cur[0]][cur[1]] < n && !visited[cur[0]][cur[1] + maps[cur[0]][cur[1]]]) {
-				int ny = cur[1] + maps[cur[0]][cur[1]];
-				que.add(new int[] {cur[0], ny});
-				visited[cur[0]][ny] = true;
-			}
+	public static void dfs(int x, int y) {
+		if (maps[x][y] == -1) {
+			System.out.println("HaruHaru");
+			System.exit(0);
 		}
-		return "Hing";
+
+		for (int i = 0; i < 2; i++) {
+			int nx = x + (maps[x][y] * dx[i]);
+			int ny = y + (maps[x][y] * dy[i]);
+
+			if (nx >= n || ny >= n || visited[nx][ny]) continue;
+			visited[nx][ny] = true;
+			dfs(nx, ny);
+		}
 	}
 }
