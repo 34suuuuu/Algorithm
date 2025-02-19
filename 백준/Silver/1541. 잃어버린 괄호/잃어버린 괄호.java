@@ -14,14 +14,17 @@ public class Main {
 		List<Integer> result = new ArrayList<>();
 
 		for (String str : splitNums) {
-			int sum = Arrays.stream(str.split("\\+"))
-				.mapToInt(Integer::parseInt)
-				.sum();
+			int sum = 0;
+			String[] tmpString = str.split("\\+");	// +로 숫자 나눠서 더해주기
+			for (String tmp : tmpString) {
+				sum += Integer.parseInt(tmp);
+			}
 			result.add(sum);
 		}
-		long answer = result.get(0) - IntStream.range(1, result.size())
-			.map(result::get)
-			.sum();
+		long answer = result.get(0);
+		for(int i=1; i<result.size(); i++) {
+			answer -= result.get(i);
+		}
 
 		System.out.println(answer);
 	}
