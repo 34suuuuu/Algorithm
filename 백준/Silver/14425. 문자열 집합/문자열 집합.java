@@ -1,5 +1,9 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
@@ -8,15 +12,18 @@ public class Main {
 
 		int n = Integer.parseInt(st.nextToken());
 		int m = Integer.parseInt(st.nextToken());
-		List<String> stArr = new LinkedList<>();
-		while (n-- > 0) {
-			stArr.add(br.readLine());
 
+		Set<String> input = new HashSet<>();
+		for (int i = 0; i < n; i++) {
+			input.add(br.readLine());
 		}
-		int result = 0;
-		while (m-- >0) {
-			if(stArr.contains(br.readLine())) result++;
+
+		int cnt = 0;
+		for (int i = 0; i < m; i++) {
+			if(input.contains(br.readLine())) {
+				cnt++;
+			}
 		}
-		System.out.println(result);
+		System.out.println(cnt);
 	}
 }
