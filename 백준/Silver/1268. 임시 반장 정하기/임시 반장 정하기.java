@@ -1,35 +1,43 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        int num = sc.nextInt();
-        int[][] student_classes = new int[num][5];
-        for(int i = 0; i < num; i++){
-            for(int j = 0; j <5 ; j++){
-                student_classes[i][j] = sc.nextInt();
-            }
-        }
-        int max = 0;
-        int leader = 0;
-        for(int i = 0; i<num; i++){
-            Set<Integer> set = new HashSet<>();
-            for(int j = 0; j<5; j++){
-                for(int k = 0; k<num; k++){
-                    if(student_classes[i][j] == student_classes[k][j]
-                            && i!=k){
-                        set.add(k);
-                    }
-                }
-            }
-            if(set.size()>max) {
-                leader = i;
-                max = set.size();
-            }
-        }
-        System.out.println(leader + 1);
-    }
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int n = Integer.parseInt(st.nextToken());
+
+		int[][] students = new int[n][5];
+		for(int i = 0; i < n; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j <  5; j++) {
+				students[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+
+		int maxValue = 0;
+		int leader = 0;
+		for (int i = 0; i < n; i++) {
+			Set<Integer> sameClass = new HashSet<>();
+			for (int j = 0; j < 5; j++) {
+				for (int k = 0; k < n; k++) {
+					if(students[i][j] == students[k][j] && i != k) {
+						sameClass.add(k);
+					}
+				}
+			}
+			if (sameClass.size() > maxValue) {
+				leader = i;
+				maxValue = sameClass.size();
+			}
+		}
+
+		System.out.println(leader + 1);
+
+
+	}
 }
