@@ -1,34 +1,44 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		StringTokenizer st;
-
-		Deque<Integer> deque = new LinkedList<>();
 		int n = Integer.parseInt(br.readLine());
-		while (n-- > 0) {
-			st = new StringTokenizer(br.readLine());
+
+		Deque<Integer> que = new LinkedList<>();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < n; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
 			String cmd = st.nextToken();
-			int num;
-			if (cmd.equals("push")) {
-				num = Integer.parseInt(st.nextToken());
-				deque.add(num);
-			}else if (cmd.equals("pop")) {
-				sb.append(deque.isEmpty() ? -1 : deque.poll()).append("\n");
-			}else if (cmd.equals("size")) {
-				sb.append(deque.size()).append("\n");
-			} else if (cmd.equals("empty")) {
-				sb.append(deque.isEmpty() ? 1 : 0).append("\n");
-			} else if (cmd.equals("front")) {
-				sb.append(deque.isEmpty() ? -1 : deque.peekFirst()).append("\n");
-			}else if (cmd.equals("back")) {
-				sb.append(deque.isEmpty() ? -1 : deque.peekLast()).append("\n");			} else {
+
+			switch (cmd) {
+				case "push":
+					int num = Integer.parseInt(st.nextToken());
+					que.add(num);
+					break;
+				case "pop":
+					sb.append(que.isEmpty() ? "-1" : que.poll()).append("\n");
+					break;
+				case "size":
+					sb.append(que.size()).append("\n");
+					break;
+				case"empty":
+					sb.append(que.isEmpty() ? "1" : "0").append("\n");
+					break;
+				case "front":
+					sb.append(que.isEmpty() ? "-1" : que.getFirst()).append("\n");
+					break;
+				case "back":
+					sb.append(que.isEmpty() ? "-1" : que.getLast()).append("\n");
+					break;
 			}
 		}
-		System.out.println(sb);
 
+		System.out.println(sb);
 	}
 }
