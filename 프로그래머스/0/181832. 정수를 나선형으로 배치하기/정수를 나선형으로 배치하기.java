@@ -2,42 +2,25 @@ class Solution {
     public int[][] solution(int n) {
         int[][] answer = new int[n][n];
         
-        int idx = 1;
-        int row = 0;
-        int col = 0;
-        int rowEnd = n-1;
-        int colEnd = n-1;
+        int[] dr = {0, 1, 0, -1};
+        int[] dc = {1, 0, -1, 0};
+        int num = 1;
+        int row = 0, col = 0, idx = 0;
         
-        int rowRange = n;
-        int colRange = n;
-        
-        while(idx <= n*n){
-            for(int i=0; i<rowRange; i++){
-                if(answer[row][i] == 0){
-                    answer[row][i] = idx++;
-                }
+        while(num <= n*n){
+            answer[row][col] = num++;
+            
+            int nr = row + dr[idx % 4];
+            int nc = col + dc[idx % 4];
+
+            if (nr < 0 || n <= nr || nc < 0 || n <= nc || answer[nr][nc] != 0){
+                idx += 1;
             }
-            for(int i=0; i<colRange; i++){
-                if(answer[i][colEnd] == 0){
-                    answer[i][colEnd] = idx++; 
-                }
-            }
-            for(int i=rowRange-1; i>=0; i--){
-                if(answer[rowEnd][i] == 0){
-                    answer[rowEnd][i] = idx++;
-                }
-            }
-            for(int i=colRange-1; i>=0; i--){
-                if(answer[i][col] == 0){
-                    answer[i][col] = idx++; 
-                }
-            }
-            row++;
-            col++;       
-            rowEnd--;
-            colEnd--;
+
+            row = row + dr[idx % 4];
+            col = col + dc[idx % 4];
         }
-        
+   
         return answer;
     }
 }
