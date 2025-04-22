@@ -24,7 +24,6 @@ public class Main {
 	}
 
 	static int combination(int n, int r) {
-
 		if(dp[n][r] > 0) {
 			return dp[n][r];
 		}
@@ -33,6 +32,6 @@ public class Main {
 			return dp[n][r] = 1;
 		}
 
-		return dp[n][r] = combination(n-1, r-1) + combination(n-1, r);
+		return dp[n][r] = combination(n - 1, r) + combination(n - 1, r - 1);
 	}
 }
