@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class  Main {
+public class Main {
 	static int n, m;
 	static int[][] maps;
 
@@ -23,28 +23,28 @@ public class  Main {
 			}
 		}
 
-		int size = Math.min(n, m) + 1;
-		while (size >= 1) {
-			for (int i = 0; i < n - size + 1; i++) {
-				for (int j = 0; j < m - size + 1; j++) {
+		int size = Math.min(n, m);
+		while (size > 1) {
+			for (int i = 0; i <= n - size; i++) {
+				for (int j = 0; j <= m - size; j++) {
 					if (chkValue(i, j, size)) {
 						// 조건에 만족하는 정사각형을 찾았다면 -> 최대값
-						System.out.println((size + 1) * (size + 1));
+						System.out.println(size * size);
 						return;
 					}
 				}
 			}
 			size--;
 		}
-		System.out.println((size + 1) * (size + 1));
+		System.out.println(size * size);
 	}
 
 	private static boolean chkValue(int x, int y, int size) {
-		if (x + size < n && y + size < m) {
+		if (x + size - 1 < n && y + size - 1 < m) {
 			int v1 = maps[x][y];
-			int v2 = maps[x + size][y];
-			int v3 = maps[x][y + size];
-			int v4 = maps[x + size][y + size];
+			int v2 = maps[x + size - 1][y];
+			int v3 = maps[x][y + size - 1];
+			int v4 = maps[x + size - 1][y + size - 1];
 
 			if (v1 == v2 && v1 == v3 && v1 == v4) {
 				return true;
