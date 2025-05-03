@@ -1,73 +1,77 @@
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-class Node {
-    int x, y;
-
-    Node(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-}
-
 public class Main {
-    static int N, M, min = Integer.MAX_VALUE;
-    static int[][] maps;
-    static ArrayList<Node> houses = new ArrayList<>();
-    static ArrayList<Node> chicken = new ArrayList<>();
-    static boolean[] visited;
+	static int[][] maps;
+	static int n, m;
+	static List<int[]> houses;
+	static List<int[]> chickens;
+	static boolean[] opened;
+	static int result;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        maps = new int[N][N];
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < N; j++) {
-                maps[i][j] = Integer.parseInt(st.nextToken());
-                if (maps[i][j] == 1) {
-                    houses.add(new Node(i, j));
-                } else if (maps[i][j] == 2) {
-                    chicken.add(new Node(i, j));
-                }
-            }
-        }
+		maps = new int[n][n];
+		houses = new ArrayList<>();
+		chickens = new ArrayList<>();
+		result = Integer.MAX_VALUE;
 
-        visited = new boolean[chicken.size()];
-        backtraking(0, 0);
-        System.out.println(min);
-    }
+		for (int i = 0; i < n; i++) {
+			st = new StringTokenizer(br.readLine());
 
-    public static void backtraking(int depth, int start) {
-        if (depth == M) {
-            int total = 0;
-            for (int i = 0; i < houses.size(); i++) {
-                int tmp = Integer.MAX_VALUE;
-                for (int j = 0; j < chicken.size(); j++) {
-                    if (visited[j] == true) {
-                        int dist = Math.min(min, Math.abs(houses.get(i).x - chicken.get(j).x) + Math.abs(houses.get(i).y - chicken.get(j).y));
-                        tmp = Math.min(tmp, dist);
-                    }
-                }
-                total += tmp;
-            }
-            min = Math.min(total, min);
-        }
+			for (int j = 0; j < n; j++) {
+				maps[i][j] = Integer.parseInt(st.nextToken());
 
-        for (int i = start; i < chicken.size(); i++) {
-            if (visited[i] == false) {
-                visited[i] = true;
-                backtraking(depth + 1, i + 1);
-                visited[i] = false;
-            }
-        }
-    }
+				if(maps[i][j] == 1){	// 집
+					houses.add(new int[]{i, j});
+				} else if (maps[i][j] == 2) {	// 치킨집
+					chickens.add(new int[]{i, j});
+				}
+			}
+		}
+
+		opened = new boolean[chickens.size()];
+
+		dfs(0, 0);
+		System.out.println(result);
+
+	}
+
+	private static void dfs(int depth, int idx) {
+		if (depth == m) {
+			int total_length = 0;
+
+			// 조합별 치킨거리 구하기
+			for (int i = 0; i < houses.size(); i++) {
+				int chicken_length = Integer.MAX_VALUE;
+				for (int j = 0; j < chickens.size(); j++) {
+					if (opened[j]) {	// 치킨집을 열었다면
+						int dist = Math.abs(houses.get(i)[0] - chickens.get(j)[0]) + Math.abs(houses.get(i)[1] - chickens.get(j)[1]);
+						chicken_length = Math.min(chicken_length, dist);
+					}
+				}
+				total_length += chicken_length;
+			}
+			result = Math.min(result, total_length);
+			return;
+		}
+
+
+		// 가능한 조합 구하기
+		for (int i = idx; i < chickens.size(); i++) {
+			opened[i] = true;
+			dfs(depth + 1, i + 1);
+			opened[i] = false;
+		}
+	}
+
 }
