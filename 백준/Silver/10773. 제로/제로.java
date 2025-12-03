@@ -1,29 +1,30 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+		int res = 0;
 
+		int k = Integer.parseInt(br.readLine());
 		Stack<Integer> stack = new Stack<>();
-		int n = Integer.parseInt(br.readLine());
 
-		for (int i = 0; i < n; i++) {
-			st = new StringTokenizer(br.readLine());
-			int in = Integer.parseInt(st.nextToken());
-			if (in != 0) {
-				stack.push(in);
-			} else {
+		while(k --> 0){
+			int num = Integer.parseInt(br.readLine());
+			if(num == 0){
 				stack.pop();
+				continue;
 			}
+			stack.push(num);
 		}
 
-		int result = stack.stream().reduce(0, (a, b) -> a + b);
-		System.out.println(result);
-
+		while(!stack.isEmpty()){
+			res += stack.pop();
+		}
+		System.out.println(res);
 	}
 }
