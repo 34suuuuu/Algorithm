@@ -1,42 +1,34 @@
-import java.util.*;
-import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-	static List<Long> list = new ArrayList<>();
-	static int n;
-	static int count = 0;
+    static ArrayList<Long> numbers = new ArrayList<>();
+    
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+        if(N < 10) {
+            System.out.println(N);
+            return;
+        } else if (N >= 1023) {
+            System.out.println(-1);
+            return;
+        }
+        for (int i = 0; i < 10; i++) {
+            search(1, i);
+        }
+        Collections.sort(numbers);
+        System.out.println(numbers.get(N));
+    }
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-		n = Integer.parseInt(br.readLine());
-		if(n <= 10) {
-			System.out.print(n);
-			return;
-		} else if (n >= 1023) {
-			System.out.print(-1);
-			return;
-		}
-
-		for(int i = 0; i < 10; i++) {
-			dfs(i);
-		}
-
-		Collections.sort(list);
-		System.out.print(list.get(n));
-	} 
-
-	private static void dfs(long num) {		
-		list.add(num);		
-		long modValue = num % 10;
+    private static void search(int idx, long num) {
+        if(idx > 10) return;
         
-		if(modValue == 0) {
-			return;
-		}
-		
-		for(long i = modValue - 1; i >= 0; i--) {
-			long newValue = num * 10 + i;
-			dfs(newValue);
-		}
-	} 
+        numbers.add(num);
+        for (int i = 0; i < num % 10; i++) {
+            search(idx + 1, num * 10 + i);
+        }
+    }
 }
