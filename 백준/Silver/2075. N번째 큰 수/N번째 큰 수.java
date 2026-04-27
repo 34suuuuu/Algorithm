@@ -19,14 +19,10 @@ public class Main {
 		}
 
 		int idx = 0;
-		while (true) {
-			if (idx == n - 1) {
-				System.out.println(pq.poll());
-				return;
-			}
+		while (idx < n - 1) {
 			pq.poll();
 			idx++;
 		}
-
+		System.out.println(pq.poll());
 	}
 }
