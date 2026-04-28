@@ -5,58 +5,53 @@ import java.util.StringTokenizer;
 
 public class Main {
 	static int[] nums;
-	static int[] operators;
+	static int[] operator = new int[4];
 	static int n;
-	static int maxValue = Integer.MIN_VALUE;
-	static int minValue = Integer.MAX_VALUE;
+	static int maxVal = Integer.MIN_VALUE;
+	static int minVal = Integer.MAX_VALUE;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		n = Integer.parseInt(br.readLine());
-		nums = new int[n];
-
 		StringTokenizer st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+
+		nums = new int[n];
+		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < n; i++) {
 			nums[i] = Integer.parseInt(st.nextToken());
 		}
 
-		operators = new int[4];    // 연산자 갯수
-		st = new StringTokenizer(br.readLine());
+		st= new StringTokenizer(br.readLine());
 		for (int i = 0; i < 4; i++) {
-			operators[i] = Integer.parseInt(st.nextToken());
+			operator[i] = Integer.parseInt(st.nextToken());
 		}
-
-		caclulate(nums[0], 1);
-		System.out.println(maxValue);
-		System.out.println(minValue);
+		backtracking(1, nums[0]);
+		System.out.println(maxVal);
+		System.out.println(minVal);
 	}
 
-	// (계산 결과)
-	public static void caclulate(int num, int idx) {
+	private static void backtracking(int idx, int sum) {
 		if (idx == n) {
-			maxValue = Math.max(maxValue, num);
-			minValue = Math.min(minValue, num);
+			maxVal = Math.max(maxVal, sum);
+			minVal = Math.min(minVal, sum);
 			return;
 		}
 
 		for (int i = 0; i < 4; i++) {
-			if (operators[i] > 0) {
-				operators[i]--;
+			if (operator[i] > 0) {
+				operator[i]--;
 
 				if (i == 0) {
-					caclulate(num + nums[idx], idx + 1);
+					backtracking(idx + 1, sum + nums[idx]);
 				} else if (i == 1) {
-					caclulate(num - nums[idx], idx + 1);
+					backtracking(idx + 1, sum - nums[idx]);
 				} else if (i == 2) {
-					caclulate(num * nums[idx], idx + 1);
-				} else if (i == 3) {
-					caclulate(num / nums[idx], idx + 1);
+					backtracking(idx + 1, sum * nums[idx]);
+				} else {
+					backtracking(idx + 1, (int)(sum / nums[idx]));
 				}
-
-				operators[i]++;
+				operator[i]++;
 			}
 		}
-
-
 	}
 }
